@@ -1,13 +1,23 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import config from "../env.yaml" with { type: "yaml" };
+
+try {
+    const config = await import('../env.yaml')
+    if (config) {
+        process.env = { ...process.env, ...config }
+    }
+} catch (error) { }
 
 export const env = createEnv({
-    runtimeEnv: config,
+    runtimeEnv: process.env,
     emptyStringAsUndefined: true,
 
     server: {
-        REACT_NON_SPAM: z.boolean().optional().default(false),
+        REACT_NON_SPAM: z
+            .string()
+            .regex(/^(true|false)$/)
+            .optional()
+            .transform((val) => val === 'true'),
         OPEN_ROUTER_TOKEN: z.string().min(1),
         SYSTEM_PROMPT: z.string().min(1),
         MODEL: z.string().min(1),

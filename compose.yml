@@ -1,0 +1,12 @@
+services:
+  spam-filter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - REACT_NON_SPAM=${REACT_NON_SPAM}
+      - OPEN_ROUTER_TOKEN=${OPEN_ROUTER_TOKEN}
+      - SYSTEM_PROMPT=${SYSTEM_PROMPT}
+      - MODEL=${MODEL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_IDS=${TELEGRAM_CHAT_IDS}
