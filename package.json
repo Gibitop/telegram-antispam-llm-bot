@@ -1,0 +1,13 @@
+{
+    "dependencies": {
+        "openai": "^5.23.0",
+        "telegraf": "^4.16.3"
+    },
+    "scripts": {
+        "dev": "bun run --watch src/main.ts",
+        "start": "bun run src/main.ts"
+    },
+    "devDependencies": {
+        "@types/bun": "^1.2.22"
+    }
+}
