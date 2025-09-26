@@ -1,54 +1,28 @@
 import OpenAI from 'openai';
 import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
+import { env } from './env';
 
-const openRouterToken = process.env.OPEN_ROUTER_TOKEN;
-if (!openRouterToken) {
-    throw new Error('OPEN_ROUTER_TOKEN is required');
-}
 
 const openrouter = new OpenAI({
     baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: openRouterToken,
+    apiKey: env.OPEN_ROUTER_TOKEN,
 });
 
-const SPAM_MODEL = 'z-ai/glm-4-32b' as const;
-
-const SYSTEM_PROMPT = [
-    'Ты фильтр спама.',
-    'Пользователь пишет сообщение, а ты отвечаешь спам это или нет.',
-    'В случае, если это спам, ты отвечаешь {"spam": true}',
-    'В случае, если это не спам, ты отвечаешь {"spam": false}',
-    'Спамом считаются сообщение об обмене криптовалют: таких как USDT, BTC, Tether, А также сообщения с обманом, предложением быстрого легкого заработка'
-].join('\n');
-
-
-type SpamResult = {
-    spam: boolean;
-};
-
-export async function detectSpam(messageText: string): Promise<boolean> {
+export async function detectSpam(messageText: string) {
     const messages: ChatCompletionMessageParam[] = [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: env.SYSTEM_PROMPT },
         { role: 'user', content: messageText }
     ];
 
     const completion = await openrouter.chat.completions.create({
-        model: SPAM_MODEL,
+        model: env.MODEL,
         messages,
     });
 
     const content = completion.choices?.[0]?.message?.content ?? '';
 
-    let parsed: SpamResult | null = null;
-    try {
-        parsed = JSON.parse(content) as SpamResult;
-    } catch {
-        // attempt to extract JSON if model added text around it
-        const match = content.match(/\{\s*\"spam\"\s*:\s*(true|false)\s*\}/i);
-        if (match) {
-            parsed = { spam: match[1]?.toLowerCase() === 'true' };
-        }
-    }
-
-    return Boolean(parsed?.spam);
+    // LLMs often almost valid JSON or JSON in the middle of some grabage text
+    // So we extract it with a regex instead of JSON.parse
+    const match = content.match(/\{.*?\"?spam\"?\s*:\s*(true|false).*?\}/i);
+    return match?.[1]?.toLowerCase() === 'true'
 }

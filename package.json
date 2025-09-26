@@ -1,11 +1,20 @@
 {
-    "dependencies": {
-        "openai": "^5.23.0",
-        "telegraf": "^4.16.3"
-    },
+    "name": "spam-filter",
+    "version": "1.1.0",
+    "description": "Spam filter for Telegram",
+    "main": "src/main.ts",
+    "author": "Ilya Nikishin",
+    "license": "MIT",
+    "type": "module",
     "scripts": {
         "dev": "bun run --watch src/main.ts",
         "start": "bun run src/main.ts"
+    },
+    "dependencies": {
+        "@t3-oss/env-core": "^0.13.8",
+        "openai": "^5.23.0",
+        "telegraf": "^4.16.3",
+        "zod": "^4.1.11"
     },
     "devDependencies": {
         "@types/bun": "^1.2.22"
