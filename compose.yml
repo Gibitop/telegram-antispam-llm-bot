@@ -7,6 +7,7 @@ services:
     pull_policy: build
     ports:
       - ${TELEGRAM_WEBHOOK_PORT:-8443}:${TELEGRAM_WEBHOOK_PORT:-8443}
+      - 8444:8444
     environment:
       - REACT_NON_SPAM=${REACT_NON_SPAM}
       - DELETE_SPAM=${DELETE_SPAM}
