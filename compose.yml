@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     environment:
       - REACT_NON_SPAM=${REACT_NON_SPAM}
       - DELETE_SPAM=${DELETE_SPAM}
