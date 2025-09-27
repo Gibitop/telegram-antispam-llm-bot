@@ -3,7 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
+    pull_policy: build
     environment:
       - REACT_NON_SPAM=${REACT_NON_SPAM}
       - DELETE_SPAM=${DELETE_SPAM}
