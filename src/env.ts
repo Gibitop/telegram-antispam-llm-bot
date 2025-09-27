@@ -27,5 +27,11 @@ export const env = createEnv({
             .regex(/^$|(\d+,)*\d+$/)
             .optional()
             .transform((val) => val ? val.split(',').map(Number) : []),
+        TELEGRAM_WEBHOOK_DOMAIN: z.string().min(1).optional(),
+        TELEGRAM_WEBHOOK_PORT: z
+            .string()
+            .regex(/^\d+$/)
+            .optional()
+            .transform((val) => (val ? Number(val) : undefined)),
     },
 });

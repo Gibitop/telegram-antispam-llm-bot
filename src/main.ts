@@ -65,13 +65,28 @@ bot.on(['message', 'edited_message'], async (ctx) => {
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-bot.launch(() => {
-    console.log('Bot started', `v${packageJson.version}`);
-    console.log('LLM endpoint:', env.LLM_ENDPOINT);
-    console.log('React non spam:', env.REACT_NON_SPAM);
-    console.log('Delete spam:', env.DELETE_SPAM);
-    console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);
-    console.log('Model:', env.MODEL);
-    console.log('System prompt:');
-    console.log(env.SYSTEM_PROMPT);
-});
+bot.launch(
+    {
+        webhook: env.TELEGRAM_WEBHOOK_DOMAIN && env.TELEGRAM_WEBHOOK_PORT
+            ? {
+                domain: env.TELEGRAM_WEBHOOK_DOMAIN,
+                port: env.TELEGRAM_WEBHOOK_PORT,
+            }
+            : undefined
+    },
+    () => {
+        console.log('Bot started', `v${packageJson.version}`);
+        const webhookMode = !!(env.TELEGRAM_WEBHOOK_DOMAIN && env.TELEGRAM_WEBHOOK_PORT);
+        console.log('Webhook mode:', webhookMode);
+        if (webhookMode) {
+            console.log('Webhook domain:', env.TELEGRAM_WEBHOOK_DOMAIN);
+            console.log('Webhook port:', env.TELEGRAM_WEBHOOK_PORT);
+        }
+        console.log('LLM endpoint:', env.LLM_ENDPOINT);
+        console.log('React non spam:', env.REACT_NON_SPAM);
+        console.log('Delete spam:', env.DELETE_SPAM);
+        console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);
+        console.log('Model:', env.MODEL);
+        console.log('System prompt:');
+        console.log(env.SYSTEM_PROMPT);
+    });

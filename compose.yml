@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     pull_policy: build
+    ports:
+      - ${TELEGRAM_WEBHOOK_PORT}:${TELEGRAM_WEBHOOK_PORT}
     environment:
       - REACT_NON_SPAM=${REACT_NON_SPAM}
       - DELETE_SPAM=${DELETE_SPAM}
@@ -14,3 +16,5 @@ services:
       - MODEL=${MODEL}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_IDS=${TELEGRAM_CHAT_IDS}
+      - TELEGRAM_WEBHOOK_DOMAIN=${TELEGRAM_WEBHOOK_DOMAIN}
+      - TELEGRAM_WEBHOOK_PORT=${TELEGRAM_WEBHOOK_PORT}

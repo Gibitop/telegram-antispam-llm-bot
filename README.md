@@ -22,7 +22,7 @@ Make sure you give your bot access to read all messages in the group, not only o
 
 Any machine with access to internet will do. No public ip needed
 
-Currently the bot only works in polling mode. The option to use telegram webhooks will be added in the future
+The bot supports both polling (default) and Telegram webhooks. If you set `TELEGRAM_WEBHOOK_DOMAIN` and `TELEGRAM_WEBHOOK_PORT`, the bot will start in webhook mode and automatically register its webhook with Telegram.
 
 Create a `.env` file or pass envs according to the [env section](#Env)
 
@@ -37,6 +37,8 @@ Run
 ```
 docker compose up -d
 ```
+
+If running in webhook mode behind a reverse proxy, set `TELEGRAM_WEBHOOK_DOMAIN` to your public domain, set `TELEGRAM_WEBHOOK_PORT` to the internal port you expose, and configure your proxy to forward HTTPS traffic to that port. The compose file already publishes the port defined by `TELEGRAM_WEBHOOK_PORT`.
 
 
 #### Without docker
@@ -160,4 +162,26 @@ true
 Or
 ```
 false
+```
+
+
+### `TELEGRAM_WEBHOOK_DOMAIN`
+**Description**: Publicly reachable domain used for Telegram webhooks. When set together with `TELEGRAM_WEBHOOK_PORT`, the bot launches in webhook mode and will call `setWebhook` automatically.
+
+**Required**: No
+
+**Example**:
+```
+example.com
+```
+
+
+### `TELEGRAM_WEBHOOK_PORT`
+**Description**: The port the bot listens on for webhook requests inside the container. The compose file publishes this port. Typically your reverse proxy terminates TLS on 443 and forwards to this port.
+
+**Required**: No
+
+**Example**:
+```
+8433
 ```
