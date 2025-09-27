@@ -63,7 +63,7 @@ process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
 bot.launch(() => {
-    console.log('Bot started');
+    console.log('Bot started', `v${process.env.npm_package_version}`);
     console.log('React non spam:', env.REACT_NON_SPAM);
     console.log('Delete spam:', env.DELETE_SPAM);
     console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);
