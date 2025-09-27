@@ -47,7 +47,9 @@ bot.on(['message', 'edited_message'], async (ctx) => {
         if (isSpam) {
             console.log('[SPAM DETECTED]', logDetails);
             if (env.DELETE_SPAM) {
-                await ctx.deleteMessage(message.message_id);
+                await ctx.deleteMessage(message.message_id).catch((error) => {
+                    console.error('Failed to delete message', error);
+                });
             } else {
                 ctx.react({ type: 'emoji', emoji: '🗿' });
             }
@@ -65,6 +67,7 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
 bot.launch(() => {
     console.log('Bot started', `v${packageJson.version}`);
+    console.log('LLM endpoint:', env.LLM_ENDPOINT);
     console.log('React non spam:', env.REACT_NON_SPAM);
     console.log('Delete spam:', env.DELETE_SPAM);
     console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);

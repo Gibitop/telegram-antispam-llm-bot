@@ -17,7 +17,8 @@ export const env = createEnv({
             .regex(/^(true|false)$/)
             .optional()
             .transform((val) => val === 'true'),
-        OPEN_ROUTER_TOKEN: z.string().min(1),
+        LLM_ENDPOINT: z.string().min(1),
+        LLM_API_KEY: z.string().min(1),
         SYSTEM_PROMPT: z.string().min(1),
         MODEL: z.string().min(1),
         TELEGRAM_BOT_TOKEN: z.string().min(1),

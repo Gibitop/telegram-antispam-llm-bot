@@ -4,8 +4,8 @@ import { env } from './env';
 
 
 const openRouter = new OpenAI({
-    baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: env.OPEN_ROUTER_TOKEN,
+    baseURL: env.LLM_ENDPOINT,
+    apiKey: env.LLM_API_KEY,
 });
 
 export async function detectSpam(messageText: string) {
