@@ -5,7 +5,6 @@ import { env } from './env';
 
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN);
 
-
 bot.on(['message', 'edited_message'], async (ctx) => {
     const chatType = ctx.chat?.type;
     if (chatType !== 'group' && chatType !== 'supergroup') {
@@ -33,26 +32,30 @@ bot.on(['message', 'edited_message'], async (ctx) => {
     }
 
     try {
-        const isSpam = await detectSpam(text);
+        const { isSpam, fullResponse } = await detectSpam(text);
+        const logDetails = {
+            chatId: ctx.chat.id,
+            messageId: message.message_id,
+            from: ctx.from
+                ? `${[ctx.from.first_name, ctx.from.last_name].filter(Boolean).join(' ')} @${ctx.from.username} (userId: ${ctx.from.id})`
+                : 'unknown',
+            text,
+            llmResponse: fullResponse,
+        };
+
         if (isSpam) {
-            ctx.react({ type: 'emoji', emoji: '🗿' });
-            console.log('[SPAM DETECTED]', {
-                chatId: ctx.chat.id,
-                messageId: message.message_id,
-                from: ctx.from,
-                text,
-            });
+            console.log('[SPAM DETECTED]', logDetails);
+            if (env.DELETE_SPAM) {
+                await ctx.deleteMessage(message.message_id);
+            } else {
+                ctx.react({ type: 'emoji', emoji: '🗿' });
+            }
         } else if (env.REACT_NON_SPAM) {
+            console.log('[NON SPAM DETECTED]', logDetails);
             ctx.react({ type: 'emoji', emoji: '👌' });
-            console.log('[NON SPAM DETECTED]', {
-                chatId: ctx.chat.id,
-                messageId: message.message_id,
-                from: ctx.from,
-                text,
-            });
         }
     } catch (error) {
-        console.error('Spam detection failed', error);
+        console.error('Spam detection failed', error, ctx.message);
     }
 });
 
@@ -62,6 +65,7 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'));
 bot.launch(() => {
     console.log('Bot started');
     console.log('React non spam:', env.REACT_NON_SPAM);
+    console.log('Delete spam:', env.DELETE_SPAM);
     console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);
     console.log('Model:', env.MODEL);
     console.log('System prompt:');
