@@ -1,6 +1,7 @@
 import { Telegraf } from 'telegraf';
 import { detectSpam } from './detectSpam';
 import { env } from './env';
+import packageJson from '../package.json' with { type: 'json' };
 
 
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN);
@@ -63,7 +64,7 @@ process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
 bot.launch(() => {
-    console.log('Bot started', `v${process.env.npm_package_version}`);
+    console.log('Bot started', `v${packageJson.version}`);
     console.log('React non spam:', env.REACT_NON_SPAM);
     console.log('Delete spam:', env.DELETE_SPAM);
     console.log('Allowed chat IDs:', env.TELEGRAM_CHAT_IDS);
