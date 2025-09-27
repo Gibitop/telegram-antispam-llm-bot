@@ -32,6 +32,6 @@ export const env = createEnv({
             .string()
             .regex(/^\d+$/)
             .optional()
-            .transform((val) => (val ? Number(val) : undefined)),
+            .transform((val) => (val ? Number(val) : 8433)),
     },
 });

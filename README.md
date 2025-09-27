@@ -179,7 +179,7 @@ example.com
 ### `TELEGRAM_WEBHOOK_PORT`
 **Description**: The port the bot listens on for webhook requests inside the container. The compose file publishes this port. Typically your reverse proxy terminates TLS on 443 and forwards to this port.
 
-**Required**: No
+**Required**: No, defaults to 8433
 
 **Example**:
 ```
