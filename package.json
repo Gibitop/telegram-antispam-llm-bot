@@ -1,6 +1,6 @@
 {
     "name": "spam-filter",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Spam filter for Telegram",
     "main": "src/main.ts",
     "author": "Ilya Nikishin",
@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "@t3-oss/env-core": "^0.13.8",
-        "openai": "^5.23.0",
+        "openai": "^5.23.1",
         "telegraf": "^4.16.3",
         "zod": "^4.1.11"
     },
