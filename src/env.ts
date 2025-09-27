@@ -18,21 +18,7 @@ export const env = createEnv({
             .optional()
             .transform((val) => val === 'true'),
         OPEN_ROUTER_TOKEN: z.string().min(1),
-        SYSTEM_PROMPT: z
-            .string()
-            .min(1)
-            .transform(val => {
-                const errorMessage = 'SYSTEM_PROMPT must be a JSON containing a string';
-                try {
-                    const parsed = JSON.parse(val);
-                    if (typeof parsed !== 'string') {
-                        throw new Error(errorMessage);
-                    }
-                    return parsed;
-                } catch {
-                    throw new Error(errorMessage);
-                }
-            }),
+        SYSTEM_PROMPT: z.string().min(1),
         MODEL: z.string().min(1),
         TELEGRAM_BOT_TOKEN: z.string().min(1),
         TELEGRAM_CHAT_IDS: z
